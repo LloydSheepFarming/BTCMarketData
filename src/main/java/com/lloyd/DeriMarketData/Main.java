@@ -1,10 +1,8 @@
 package com.lloyd.DeriMarketData;
 
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -14,12 +12,13 @@ import java.util.HashMap;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 import com.lloyd.DeriMarketData.DataStructure.BookSummaryQuote;
 
-@RestController
+@Controller
 @SpringBootApplication
 public class Main {
 

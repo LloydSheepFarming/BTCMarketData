@@ -1,1 +1,1 @@
-web: java -jar target/DeriMarketData-0.0.2.jar --server.port=80
+web: java -jar target/DeriMarketData-0.0.2.jar
