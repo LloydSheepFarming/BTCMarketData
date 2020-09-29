@@ -12,6 +12,7 @@ import java.util.HashMap;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,7 +34,8 @@ public class Main {
 	}
 	
 	@RequestMapping("/listTickers")
-	String listTickers(Map<String, Object> model) throws Exception{
+	@ResponseBody
+	String listTickers() throws Exception{
 		
 		long timerStart = System.currentTimeMillis();
 		
@@ -98,8 +100,7 @@ public class Main {
 		
 		strResult = timerDiff.concat(strResult);
 		
-		model.put("records", strResult);
-		return "db";
+		return strResult;
 	}
 	
 	private String TimeString(long Millis) {
