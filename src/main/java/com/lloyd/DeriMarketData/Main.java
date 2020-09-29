@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
+import com.lloyd.DeriMarketData.DataStructure.BookSummaryQuote;
 
 @RestController
 @SpringBootApplication
@@ -48,6 +49,7 @@ public class Main {
 		BookSummaryQuote thisQuote = gson.fromJson(result, BookSummaryQuote.class);
 	    
 		strResult = strResult.concat(TimeString(thisQuote.usOut/1000));
+		strResult = strResult.concat("<p>");
 		
 		strResult = strResult.concat("<table><tr><th>Contract</th><th>Bid</th><th>Ask</th><th>Mid</th><th>Mark</th></tr><tr>");
 		
@@ -63,7 +65,10 @@ public class Main {
 		ArrayList<Long>SortedStrikes = SortStrike(ContractToID);
 		
 		strResult = strResult.concat(SortedExpiries.toString());
+		strResult = strResult.concat("<p>");
+		
 		strResult = strResult.concat(SortedStrikes.toString());
+		strResult = strResult.concat("<p>");
 		
 		for(int i=0; i<thisQuote.result.length; i++) {
 			

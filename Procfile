@@ -1,1 +1,1 @@
-web: java -jar build/libs/DeriMarketData-0.0.2.jar
+web: java -jar target/DeriMarketData-0.0.2.jar
