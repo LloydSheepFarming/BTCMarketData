@@ -29,11 +29,11 @@ public class Main {
 	
 	@RequestMapping("/")
 	String root() {
-		return "It Works!";
+		return "index";
 	}
 	
 	@RequestMapping("/listTickers")
-	String listTickers() throws Exception{
+	String listTickers(Map<String, Object> model) throws Exception{
 		
 		long timerStart = System.currentTimeMillis();
 		
@@ -97,7 +97,9 @@ public class Main {
 		strResult = strResult.concat("</table>");
 		
 		strResult = timerDiff.concat(strResult);
-		return strResult;
+		
+		model.put("records", strResult);
+		return "db";
 	}
 	
 	private String TimeString(long Millis) {
