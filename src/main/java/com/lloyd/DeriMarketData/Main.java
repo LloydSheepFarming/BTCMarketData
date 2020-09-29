@@ -31,7 +31,7 @@ public class Main {
 	@RequestMapping("/")
 	@ResponseBody
 	String root() {
-		return "<a href=\"/listTickers\">List BTC</a><br/><a href=\\\"/listTickersETH\\\">List ETH</a>";
+		return "<a href=\"/listTickers\">List BTC</a><br/><a href=\"/listTickersETH\">List ETH</a>";
 	}
 	
 	@RequestMapping("/listTickers")
