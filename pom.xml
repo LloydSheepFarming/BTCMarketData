@@ -10,7 +10,9 @@
     <version>2.3.0.RELEASE</version>
     <relativePath/>
   </parent>
-  
+    <name>btcmarketdata</name>
+
+
   <properties>
   <java.version>1.8</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
