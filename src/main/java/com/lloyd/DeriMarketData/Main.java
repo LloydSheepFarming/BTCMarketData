@@ -53,7 +53,7 @@ public class Main {
 		strResult = strResult.concat(TimeString(thisQuote.usOut/1000));
 		strResult = strResult.concat("<p>");
 		
-		strResult = strResult.concat("<table><tr><th>Contract</th><th>Bid</th><th>Ask</th><th>Mid</th><th>Mark</th></tr><tr>");
+		strResult = strResult.concat("<table class=\"table table-striped table-hover table-dark\"><tr><th>Contract</th><th>Bid</th><th>Ask</th><th>Mid</th><th>Mark</th></tr><tr>");
 		
 		
 		Map<String, Integer> ContractToID = new HashMap<String, Integer>();
