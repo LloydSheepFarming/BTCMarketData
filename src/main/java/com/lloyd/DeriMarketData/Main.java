@@ -29,8 +29,9 @@ public class Main {
 	}
 	
 	@RequestMapping("/")
+	@ResponseBody
 	String root() {
-		return "index";
+		return "<a href=\"/listTickers\">List</a>";
 	}
 	
 	@RequestMapping("/listTickers")
