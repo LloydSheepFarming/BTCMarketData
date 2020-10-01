@@ -14,6 +14,7 @@ import java.util.HashMap;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.stereotype.Controller;
@@ -34,20 +35,27 @@ public class Main {
 	@RequestMapping("/")
 	@ResponseBody
 	String root() {
-		return "<a href=\"/listTickers\">List BTC</a><br/><a href=\"/listTickersETH\">List ETH</a>";
+		return "<link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css\" integrity=\"sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z\" crossorigin=\"anonymous\"> <script src=\"https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js\" integrity=\"sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd\" crossorigin=\"anonymous\"></script>" + 
+				"<a href=\"/listTickers/BTC/\">List BTC</a><br/><a href=\"/listTickers/ETH/\">List ETH</a>";
 	}
 	
-	@RequestMapping("/listTickers")
+	@RequestMapping("/listTickers/")
 	@ResponseBody
-	String listTickers() throws Exception{
+	String redirectRoot() {
+		return "<script>window.location.href = \"/\"</script>";
+	}
+	
+	@RequestMapping("/listTickers/{Ccy}")
+	@ResponseBody
+	String listTickers(@PathVariable String Ccy) throws Exception{
 		
 		long timerStart = System.currentTimeMillis();
 		
 		String strResult = "";
 		
-		strResult = strResult.concat("<link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css\" integrity=\"sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z\" crossorigin=\"anonymous\"> <script src=\"https://code.jquery.com/jquery-3.5.1.slim.min.js\" integrity=\"sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj\" crossorigin=\"anonymous\"></script> <script src=\"https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js\" integrity=\"sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN\" crossorigin=\"anonymous\"></script> <script src=\"https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js\" integrity=\"sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV\" crossorigin=\"anonymous\"></script>");
+		strResult = strResult.concat("<link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css\" integrity=\"sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z\" crossorigin=\"anonymous\"> <script src=\"https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js\" integrity=\"sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd\" crossorigin=\"anonymous\"></script>");
 		
-		String urlOption = "https://www.deribit.com/api/v2/public/get_book_summary_by_currency?currency=BTC&kind=option";
+		String urlOption = "https://www.deribit.com/api/v2/public/get_book_summary_by_currency?currency=" + Ccy + "&kind=option";
 		String result = HttpClient.doGet(urlOption);
 		
 		Gson gson = new Gson();
@@ -57,7 +65,6 @@ public class Main {
 	    
 		strResult = strResult.concat(TimeString(thisQuote.usOut/1000));
 		strResult = strResult.concat("<p>");
-		
 		
 		Map<String, Integer> ContractToID = new HashMap<String, Integer>();
 		for(int i=0; i<thisQuote.result.length; i++) {
@@ -86,7 +93,7 @@ public class Main {
 				
 				String thisStrike = Long.toString(thisStrikes.get(i)); 
 				
-				String thisContractMom = "BTC-" + thisExpiry + "-" + thisStrike;
+				String thisContractMom = Ccy + "-" + thisExpiry + "-" + thisStrike;
 				String thisContractC = thisContractMom + "-C";
 				String thisContractP = thisContractMom + "-P";
 				
