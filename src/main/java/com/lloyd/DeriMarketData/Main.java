@@ -3,6 +3,7 @@ package com.lloyd.DeriMarketData;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import java.util.Collections;
@@ -57,48 +58,63 @@ public class Main {
 		strResult = strResult.concat(TimeString(thisQuote.usOut/1000));
 		strResult = strResult.concat("<p>");
 		
-		strResult = strResult.concat("<table class=\"table table-striped table-hover table-dark\"><tr><th>Contract</th><th>Bid</th><th>Ask</th><th>Mid</th><th>Mark</th></tr><tr>");
-		
 		
 		Map<String, Integer> ContractToID = new HashMap<String, Integer>();
-		
 		for(int i=0; i<thisQuote.result.length; i++) {
 			ContractToID.put(thisQuote.result[i].instrument_name, i);
 		}
 
-
 		Map<String, ArrayList<Long>> expiryStrikeList = ExpiryStrikeList(ContractToID);
-		
 		strResult = strResult.concat(expiryStrikeList.toString());
-		strResult = strResult.concat("<p>");
 		
-		for(int i=0; i<thisQuote.result.length; i++) {
+		ArrayList<String> sortedExpiry = SortExpiry(ContractToID);
+		
+		for(int j=0; j<sortedExpiry.size(); j++) {
 			
-			strResult = strResult.concat("<tr>");
+			String thisExpiry = sortedExpiry.get(j);
 			
-			strResult = strResult.concat("<td>");
-			strResult = strResult.concat(thisQuote.result[i].instrument_name);
-			strResult = strResult.concat("</td><td>");
-			strResult = strResult.concat(Double.toString(thisQuote.result[i].bid_price));
-			strResult = strResult.concat("</td><td>");
-			strResult = strResult.concat(Double.toString(thisQuote.result[i].ask_price));
-			strResult = strResult.concat("</td><td>");
-			strResult = strResult.concat(Double.toString(thisQuote.result[i].mid_price));
-			strResult = strResult.concat("</td><td>");
-			strResult = strResult.concat(Double.toString(thisQuote.result[i].mark_price));
-			strResult = strResult.concat("</td>");
+			strResult = strResult.concat("<p><table class=\"table table-striped table-hover table-dark\"><tr><th>" + thisExpiry + "</th><th>Bid</th><th>Ask</th><th>Mid</th><th>Mark</th></tr><tr>");
 			
-			strResult = strResult.concat("</tr>");
+			ArrayList<Long> thisStrikes = expiryStrikeList.get(thisExpiry);
+
+			Collections.sort(thisStrikes, new Comparator<Long>() {
+				public int compare(Long left, Long right) {
+					return left > right ? 1:-1;
+				}
+			});
+			
+			for(int i=0; i<thisStrikes.size(); i++) {
+				
+				String thisStrike = Long.toString(thisStrikes.get(i)); 
+				
+				String thisContract = "BTC-" + thisExpiry + "-" + thisStrike + "-C";
+				int thisContractID = ContractToID.get(thisContract);
+
+				strResult = strResult.concat("<tr>");
+				
+				strResult = strResult.concat("<td>");
+				strResult = strResult.concat(thisQuote.result[thisContractID].instrument_name);
+				strResult = strResult.concat("</td><td>");
+				strResult = strResult.concat(String.format("%.4f", thisQuote.result[thisContractID].bid_price));
+				strResult = strResult.concat("</td><td>");
+				strResult = strResult.concat(String.format("%.4f", thisQuote.result[thisContractID].ask_price));
+				strResult = strResult.concat("</td><td>");
+				strResult = strResult.concat(String.format("%.4f", thisQuote.result[thisContractID].mid_price));
+				strResult = strResult.concat("</td><td>");
+				strResult = strResult.concat(String.format("%.4f", thisQuote.result[thisContractID].mark_price));
+				strResult = strResult.concat("</td>");
+				
+				strResult = strResult.concat("</tr>");
+				
+			}
+			
+			strResult = strResult.concat("</table>");
 			
 		}
 		
-		strResult = strResult.concat("</table>");
 		
 		long timerEnd = System.currentTimeMillis();
-		String timerDiff =  Long.toString((timerDataEnd - timerStart)).toString().concat("ms ").concat(Long.toString((timerEnd - timerDataEnd)).toString().concat("ms"));
-		
-		strResult = strResult.concat("</table>");
-		
+		String timerDiff =  Long.toString((timerDataEnd - timerStart)).toString().concat("ms ").concat(Long.toString((timerEnd - timerDataEnd)).toString().concat("ms <br/>"));
 		strResult = timerDiff.concat(strResult);
 		
 		return strResult;
