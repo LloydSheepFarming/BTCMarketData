@@ -3,6 +3,8 @@ package com.lloyd.DeriMarketData;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -61,15 +63,11 @@ public class Main {
 		for(int i=0; i<thisQuote.result.length; i++) {
 			ContractToID.put(thisQuote.result[i].instrument_name, i);
 		}
+
+
+		Map<String, ArrayList<Long>> expiryStrikeList = ExpiryStrikeList(ContractToID);
 		
-		ArrayList<String>SortedExpiries = SortExpiry(ContractToID);
-		
-		ArrayList<Long>SortedStrikes = SortStrike(ContractToID);
-		
-		strResult = strResult.concat(SortedExpiries.toString());
-		strResult = strResult.concat("<p>");
-		
-		strResult = strResult.concat(SortedStrikes.toString());
+		strResult = strResult.concat(expiryStrikeList.toString());
 		strResult = strResult.concat("<p>");
 		
 		for(int i=0; i<thisQuote.result.length; i++) {
@@ -208,10 +206,35 @@ public class Main {
 		    }
 		});
 		
-		System.out.println(DateExpiries.toString());
-		System.out.println(AllExpiries.toString());
 		return AllExpiries;
 	}
+
+	private Map<String, ArrayList<Long>> ExpiryStrikeList(Map<String, Integer> ContractIDMap) throws ParseException{
+		
+		Map<String, ArrayList<Long>> expiryStrikeList = new HashMap<String, ArrayList<Long>>();
+		
+		ArrayList<String> SortedExpiries = SortExpiry(ContractIDMap);
+		for(int i = 0; i < SortedExpiries.size(); i++) {
+			expiryStrikeList.put(SortedExpiries.get(i), new ArrayList<Long>());
+		}
+		
+		ArrayList<String> AllContracts = new ArrayList<String>(ContractIDMap.keySet());
+		for(int i = 0; i < AllContracts.size(); i++) {
+			
+			String[] thisContractInfo = AllContracts.get(i).split("-");
+			
+			String thisContractExpiry = thisContractInfo[1];
+			Long thisContractStrike = Long.parseLong(thisContractInfo[2]);
+			
+			expiryStrikeList.get(thisContractExpiry).add(thisContractStrike);
+			
+		}
+		
+		return expiryStrikeList;
+		
+	}
+	
+	
 	
 	private ArrayList<Long> SortStrike(Map<String, Integer> ContractIDMap) {
 		
