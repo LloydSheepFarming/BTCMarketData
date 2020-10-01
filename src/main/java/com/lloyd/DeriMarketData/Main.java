@@ -65,15 +65,14 @@ public class Main {
 		}
 
 		Map<String, ArrayList<Long>> expiryStrikeList = ExpiryStrikeList(ContractToID);
-		strResult = strResult.concat(expiryStrikeList.toString());
-		
+
 		ArrayList<String> sortedExpiry = SortExpiry(ContractToID);
 		
 		for(int j=0; j<sortedExpiry.size(); j++) {
 			
 			String thisExpiry = sortedExpiry.get(j);
 			
-			strResult = strResult.concat("<p><table class=\"table table-striped table-hover table-dark\"><tr><th>" + thisExpiry + "</th><th>Bid</th><th>Ask</th><th>Mid</th><th>Mark</th></tr><tr>");
+			strResult = strResult.concat("<p><table style='text-align: center;' class=\"table table-striped table-hover table-dark\"><tr><th>Bid</th><th>Ask</th><th>"+ thisExpiry + "</th><th>Bid</th><th>Ask</th></tr><tr>");
 			
 			ArrayList<Long> thisStrikes = expiryStrikeList.get(thisExpiry);
 
@@ -87,21 +86,33 @@ public class Main {
 				
 				String thisStrike = Long.toString(thisStrikes.get(i)); 
 				
-				String thisContract = "BTC-" + thisExpiry + "-" + thisStrike + "-C";
-				int thisContractID = ContractToID.get(thisContract);
+				String thisContractMom = "BTC-" + thisExpiry + "-" + thisStrike;
+				String thisContractC = thisContractMom + "-C";
+				String thisContractP = thisContractMom + "-P";
+				
+				int idC = ContractToID.get(thisContractC);
+				int idP = ContractToID.get(thisContractP);
 
 				strResult = strResult.concat("<tr>");
 				
 				strResult = strResult.concat("<td>");
-				strResult = strResult.concat(thisQuote.result[thisContractID].instrument_name);
+				strResult = strResult.concat(String.format("%.4f", thisQuote.result[idC].bid_price));
 				strResult = strResult.concat("</td><td>");
-				strResult = strResult.concat(String.format("%.4f", thisQuote.result[thisContractID].bid_price));
+				strResult = strResult.concat(String.format("%.4f", thisQuote.result[idC].ask_price));
 				strResult = strResult.concat("</td><td>");
-				strResult = strResult.concat(String.format("%.4f", thisQuote.result[thisContractID].ask_price));
+				//strResult = strResult.concat(String.format("%.4f", thisQuote.result[idC].mid_price));
+				//strResult = strResult.concat("</td><td>");
+				//strResult = strResult.concat(String.format("%.4f", thisQuote.result[idC].mark_price));
+				//strResult = strResult.concat("</td><td>");
+				strResult = strResult.concat(thisContractMom);
 				strResult = strResult.concat("</td><td>");
-				strResult = strResult.concat(String.format("%.4f", thisQuote.result[thisContractID].mid_price));
+				strResult = strResult.concat(String.format("%.4f", thisQuote.result[idP].bid_price));
 				strResult = strResult.concat("</td><td>");
-				strResult = strResult.concat(String.format("%.4f", thisQuote.result[thisContractID].mark_price));
+				strResult = strResult.concat(String.format("%.4f", thisQuote.result[idP].ask_price));
+				//strResult = strResult.concat("</td><td>");
+				//strResult = strResult.concat(String.format("%.4f", thisQuote.result[idP].mid_price));
+				//strResult = strResult.concat("</td><td>");
+				//strResult = strResult.concat(String.format("%.4f", thisQuote.result[idP].mark_price));
 				strResult = strResult.concat("</td>");
 				
 				strResult = strResult.concat("</tr>");
