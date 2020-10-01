@@ -51,6 +51,8 @@ public class Main {
 		
 		Gson gson = new Gson();
 		BookSummaryQuote thisQuote = gson.fromJson(result, BookSummaryQuote.class);
+		
+		long timerDataEnd = System.currentTimeMillis();
 	    
 		strResult = strResult.concat(TimeString(thisQuote.usOut/1000));
 		strResult = strResult.concat("<p>");
@@ -93,7 +95,7 @@ public class Main {
 		strResult = strResult.concat("</table>");
 		
 		long timerEnd = System.currentTimeMillis();
-		String timerDiff = Long.toString((timerEnd - timerStart)).toString().concat("ms");
+		String timerDiff =  Long.toString((timerDataEnd - timerStart)).toString().concat("ms ").concat(Long.toString((timerEnd - timerDataEnd)).toString().concat("ms"));
 		
 		strResult = strResult.concat("</table>");
 		
@@ -102,75 +104,6 @@ public class Main {
 		return strResult;
 	}
 	
-	@RequestMapping("/listTickersETH")
-	@ResponseBody
-	String listTickersETH() throws Exception{
-		
-		long timerStart = System.currentTimeMillis();
-		
-		String strResult = "";
-		
-		strResult = strResult.concat("<link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css\" integrity=\"sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z\" crossorigin=\"anonymous\"> <script src=\"https://code.jquery.com/jquery-3.5.1.slim.min.js\" integrity=\"sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj\" crossorigin=\"anonymous\"></script> <script src=\"https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js\" integrity=\"sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN\" crossorigin=\"anonymous\"></script> <script src=\"https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js\" integrity=\"sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV\" crossorigin=\"anonymous\"></script>");
-		
-		String urlOption = "https://www.deribit.com/api/v2/public/get_book_summary_by_currency?currency=ETH&kind=option";
-		String result = HttpClient.doGet(urlOption);
-		
-		Gson gson = new Gson();
-		BookSummaryQuote thisQuote = gson.fromJson(result, BookSummaryQuote.class);
-	    
-		strResult = strResult.concat(TimeString(thisQuote.usOut/1000));
-		strResult = strResult.concat("<p>");
-		
-		strResult = strResult.concat("<table class=\"table table-striped table-hover table-dark\"><tr><th>Contract</th><th>Bid</th><th>Ask</th><th>Mid</th><th>Mark</th></tr><tr>");
-		
-		
-		Map<String, Integer> ContractToID = new HashMap<String, Integer>();
-		
-		for(int i=0; i<thisQuote.result.length; i++) {
-			ContractToID.put(thisQuote.result[i].instrument_name, i);
-		}
-		
-		ArrayList<String>SortedExpiries = SortExpiry(ContractToID);
-		
-		ArrayList<Long>SortedStrikes = SortStrike(ContractToID);
-		
-		strResult = strResult.concat(SortedExpiries.toString());
-		strResult = strResult.concat("<p>");
-		
-		strResult = strResult.concat(SortedStrikes.toString());
-		strResult = strResult.concat("<p>");
-		
-		for(int i=0; i<thisQuote.result.length; i++) {
-			
-			strResult = strResult.concat("<tr>");
-			
-			strResult = strResult.concat("<td>");
-			strResult = strResult.concat(thisQuote.result[i].instrument_name);
-			strResult = strResult.concat("</td><td>");
-			strResult = strResult.concat(Double.toString(thisQuote.result[i].bid_price));
-			strResult = strResult.concat("</td><td>");
-			strResult = strResult.concat(Double.toString(thisQuote.result[i].ask_price));
-			strResult = strResult.concat("</td><td>");
-			strResult = strResult.concat(Double.toString(thisQuote.result[i].mid_price));
-			strResult = strResult.concat("</td><td>");
-			strResult = strResult.concat(Double.toString(thisQuote.result[i].mark_price));
-			strResult = strResult.concat("</td>");
-			
-			strResult = strResult.concat("</tr>");
-			
-		}
-		
-		strResult = strResult.concat("</table>");
-		
-		long timerEnd = System.currentTimeMillis();
-		String timerDiff = Long.toString((timerEnd - timerStart)).toString().concat("ms");
-		
-		strResult = strResult.concat("</table>");
-		
-		strResult = timerDiff.concat(strResult);
-		
-		return strResult;
-	}
 	
 	private String TimeString(long Millis) {
 		SimpleDateFormat formatter= new SimpleDateFormat("dd-MMM-yyyy HHmmssz");
