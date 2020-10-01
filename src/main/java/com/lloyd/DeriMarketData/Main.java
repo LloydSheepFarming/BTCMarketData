@@ -79,13 +79,13 @@ public class Main {
 			
 			String thisExpiry = sortedExpiry.get(j);
 			
-			strResult = strResult.concat("<p><table style='text-align: center;' class=\"table table-striped table-hover table-dark\"><tr><th>Bid</th><th>Ask</th><th>"+ thisExpiry + "</th><th>Bid</th><th>Ask</th></tr><tr>");
+			strResult = strResult.concat("<p><table style='text-align: center;' class=\"table table-striped table-hover table-dark\"><tr><th style=\"width:20%\">Bid</th><th style=\"width:20%\">Ask</th><th style=\"width:20%\">"+ thisExpiry + "</th><th style=\"width:20%\">Bid</th><th style=\"width:20%\">Ask</th></tr><tr>");
 			
 			ArrayList<Long> thisStrikes = expiryStrikeList.get(thisExpiry);
 
 			Collections.sort(thisStrikes, new Comparator<Long>() {
 				public int compare(Long left, Long right) {
-					return left > right ? 1:-1;
+					return left > right ? 1:-1; 
 				}
 			});
 			
