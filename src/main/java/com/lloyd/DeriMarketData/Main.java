@@ -124,18 +124,17 @@ public class Main {
 				AllExpiries.add(thisExpiry);
 			}
 		}
+
+		SimpleDateFormat formatter = new SimpleDateFormat("ddMMMyy");
 		
-		ArrayList<Long> DateExpiries = new ArrayList<Long>();
-		for(int i = 0; i<AllExpiries.size();i++) {
-			String thisExpiry = AllExpiries.get(i);
-			SimpleDateFormat formatter = new SimpleDateFormat("ddMMMyy");
-			Date thisDate = formatter.parse(thisExpiry); 
-			DateExpiries.add(thisDate.toInstant().toEpochMilli());
-		}
-		
-		Collections.sort(AllExpiries, new Comparator<Object>() {
-		    public int compare(Object left, Object right) {
-		    	return Long.compare(DateExpiries.get(AllExpiries.indexOf(left)), DateExpiries.get(AllExpiries.indexOf(right)));
+		Collections.sort(AllExpiries, new Comparator<String>() {
+		    public int compare(String left, String right) {
+		    	try {
+					return Long.compare(formatter.parse(left).toInstant().toEpochMilli(), formatter.parse(right).toInstant().toEpochMilli());
+				} catch (ParseException e) {
+					e.printStackTrace();
+					return 0;
+				}
 		    }
 		});
 		
@@ -159,15 +158,12 @@ public class Main {
 			String thisContractExpiry = thisContractInfo[1];
 			Long thisContractStrike = Long.parseLong(thisContractInfo[2]);
 			
-			expiryStrikeList.get(thisContractExpiry).add(thisContractStrike);
-			
+			if(!expiryStrikeList.get(thisContractExpiry).contains(thisContractStrike)) {
+				expiryStrikeList.get(thisContractExpiry).add(thisContractStrike);
+			}
 		}
-		
 		return expiryStrikeList;
-		
 	}
-	
-	
 	
 	private ArrayList<Long> SortStrike(Map<String, Integer> ContractIDMap) {
 		
