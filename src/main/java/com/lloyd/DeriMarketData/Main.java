@@ -76,16 +76,14 @@ public class Main {
 		ArrayList<String> sortedExpiry = SortExpiry(ContractToID);
 		
 		
-		strResult += "<link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css\" integrity=\"sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z\" crossorigin=\"anonymous\"> <script src=\"https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js\" integrity=\"sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd\" crossorigin=\"anonymous\"></script>";
-		
 		strResult +="<table style='text-align: left;' class=\"table table-striped table-hover table-light\">";
 		strResult += "<tr><th>Expiry</th></tr>"+
-				"<tr><td><a href = \"/listTickers/BTC/ALL\">ALL</a><td></tr>";
+				"<tr><td><a href = \"/listTickers/"+ Ccy +"/ALL\">ALL</a><td></tr>";
 		for(int j=0; j<sortedExpiry.size(); j++) {
 			
 			String thisExpiry = sortedExpiry.get(j);
 			
-			strResult += "<tr><td><a href = \"/listTickers/BTC/"  + thisExpiry + "\">" + thisExpiry + "</a><td></tr>";
+			strResult += "<tr><td><a href = \"/listTickers/"+ Ccy +"/"  + thisExpiry + "\">" + thisExpiry + "</a><td></tr>";
 		}
 		strResult +="</table>";
 		
@@ -153,7 +151,10 @@ public class Main {
 		String timerDiff =  "<div>Retrieval Time: " + Long.toString((timerDataEnd - timerStart)).toString().concat("ms") + "</div>"
 				+ "<div>Process Time: "+ Long.toString((timerEnd - timerDataEnd)).toString() +"ms</div>"+
 				"<div>Data Time: "+TimeString(thisQuote.usOut/1000) + "</div>";
-		strResult = timerDiff.concat(strResult);
+		strResult = timerDiff +  strResult;
+		
+		strResult = "<link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css\" integrity=\"sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z\" crossorigin=\"anonymous\"> <script src=\"https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js\" integrity=\"sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd\" crossorigin=\"anonymous\"></script>"
+					+ strResult;
 		
 		return strResult;
 	}
