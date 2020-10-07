@@ -19,9 +19,11 @@ public class OptionQuote {
 	public double bid_price;
 	public String base_currency;
 	public double ask_price;
+	public double bid_vol = 0;
+	public double ask_vol = 0;
 	
 	OptionQuote(){
-
+	
 	}
 
 }

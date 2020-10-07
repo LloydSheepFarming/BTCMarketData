@@ -22,12 +22,29 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 import com.lloyd.DeriMarketData.DataStructure.BookSummaryQuote;
-
+import com.lloyd.DeriMarketData.Maths.BlackScholesFormulae;
+import com.lloyd.DeriMarketData.Utilities.DateUtilities;
+ 
 @Controller
 @SpringBootApplication
 public class Main {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ParseException {
+		
+		
+		double YF = DateUtilities.DateStringDeribitToYF("25DEC20");
+		double Spot = 10749d;
+		double Strike = 10000d;
+		double Vol = 0.625;
+		
+		double CallPx = BlackScholesFormulae.BlackScholesCallPrice(Spot, Strike, YF, Vol);
+		double IV = BlackScholesFormulae.BlackScholesCallIV(Spot, Strike, YF, CallPx);
+		
+		System.out.println(CallPx);
+		System.out.println(IV);
+		
+		//return;
+		
 		SpringApplication.run(Main.class, args);
 
 	}
@@ -63,6 +80,7 @@ public class Main {
 		
 		Gson gson = new Gson();
 		BookSummaryQuote thisQuote = gson.fromJson(result, BookSummaryQuote.class);
+		thisQuote.ComputeVol();
 		
 		long timerDataEnd = System.currentTimeMillis();
 		
@@ -95,7 +113,7 @@ public class Main {
 				continue;
 			}
 			
-			strResult = strResult.concat("<p><table style='text-align: center;' class=\"table table-striped table-hover table-dark\"><tr><th style=\"width:20%\">Bid</th><th style=\"width:20%\">Ask</th><th style=\"width:20%\">"+ thisExpiry + "</th><th style=\"width:20%\">Bid</th><th style=\"width:20%\">Ask</th></tr><tr>");
+			strResult = strResult.concat("<p><table style='text-align: center;' class=\"table table-striped table-hover table-dark\"><tr><th style=\"width:10%\">Bid</th><th style=\"width:10%\">Ask</th><th style=\"width:10%\">Bid Vol</th><th style=\"width:10%\">Ask Vol</th><th style=\"width:20%\">"+ thisExpiry + "<th style=\"width:10%\">Bid Vol</th><th style=\"width:10%\">Ask Vol</th><th style=\"width:10%\">Bid</th><th style=\"width:10%\">Ask</th></tr><tr>");
 			
 			ArrayList<Long> thisStrikes = expiryStrikeList.get(thisExpiry);
 
@@ -123,19 +141,22 @@ public class Main {
 				strResult = strResult.concat("</td><td>");
 				strResult = strResult.concat(String.format("%.4f", thisQuote.result[idC].ask_price));
 				strResult = strResult.concat("</td><td>");
-				//strResult = strResult.concat(String.format("%.4f", thisQuote.result[idC].mid_price));
-				//strResult = strResult.concat("</td><td>");
-				//strResult = strResult.concat(String.format("%.4f", thisQuote.result[idC].mark_price));
-				//strResult = strResult.concat("</td><td>");
+				strResult = strResult.concat(String.format("%.2f%%", thisQuote.result[idC].bid_vol*100));
+				strResult = strResult.concat("</td><td>");
+				strResult = strResult.concat(String.format("%.2f%%", thisQuote.result[idC].ask_vol*100));
+				strResult = strResult.concat("</td><td>");
+				
 				strResult = strResult.concat(thisContractMom);
+				
+				strResult = strResult.concat("</td><td>");
+				strResult = strResult.concat(String.format("%.2f%%", thisQuote.result[idP].bid_vol*100));
+				strResult = strResult.concat("</td><td>");
+				strResult = strResult.concat(String.format("%.2f%%", thisQuote.result[idP].ask_vol*100));
 				strResult = strResult.concat("</td><td>");
 				strResult = strResult.concat(String.format("%.4f", thisQuote.result[idP].bid_price));
 				strResult = strResult.concat("</td><td>");
 				strResult = strResult.concat(String.format("%.4f", thisQuote.result[idP].ask_price));
-				//strResult = strResult.concat("</td><td>");
-				//strResult = strResult.concat(String.format("%.4f", thisQuote.result[idP].mid_price));
-				//strResult = strResult.concat("</td><td>");
-				//strResult = strResult.concat(String.format("%.4f", thisQuote.result[idP].mark_price));
+				
 				strResult = strResult.concat("</td>");
 				
 				strResult = strResult.concat("</tr>");
@@ -148,10 +169,11 @@ public class Main {
 		
 		
 		long timerEnd = System.currentTimeMillis();
-		String timerDiff =  "<div>Retrieval Time: " + Long.toString((timerDataEnd - timerStart)).toString().concat("ms") + "</div>"
+		String strHeader =  "<div><a href=\"/\">Home</a></div>"  
+				+  "<div>Retrieval Time: " + Long.toString((timerDataEnd - timerStart)).toString().concat("ms") + "</div>"
 				+ "<div>Process Time: "+ Long.toString((timerEnd - timerDataEnd)).toString() +"ms</div>"+
 				"<div>Data Time: "+TimeString(thisQuote.usOut/1000) + "</div>";
-		strResult = timerDiff +  strResult;
+		strResult = strHeader +  strResult;
 		
 		strResult = "<link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css\" integrity=\"sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z\" crossorigin=\"anonymous\"> <script src=\"https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js\" integrity=\"sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd\" crossorigin=\"anonymous\"></script>"
 					+ strResult;
