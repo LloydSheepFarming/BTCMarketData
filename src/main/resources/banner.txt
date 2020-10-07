@@ -6,3 +6,7 @@
  |_|  |_|\___|_|  \___/|_|\_\\__,_|
 
 :: Built with Spring Boot :: ${spring-boot.version}
+
+https://www.deribit.com/api/v2/public/get_last_trades_by_instrument?count=1000&instrument_name=BTC-PERPETUAL
+
+https://www.deribit.com/api/v2/public/get_option_chart_data?range=all&instrument_name=BTC-27NOV20-16000-C

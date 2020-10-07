@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+
 public class HttpClient {
     public static String doGet(String httpurl) {
         HttpURLConnection connection = null;
