@@ -47,13 +47,16 @@ public class Main {
 	
 	@RequestMapping("/listTickers/{Ccy}")
 	@ResponseBody
-	String listTickers(@PathVariable String Ccy) throws Exception{
+	String redirectRoot(@PathVariable String Ccy) {
+		return "<script>window.location.href = \"/listTickers/" + Ccy + "/ALL\"</script>";
+	}
+	
+	@RequestMapping("/listTickers/{Ccy}/{Expiry}")
+	@ResponseBody
+	String listTickers(@PathVariable String Ccy, @PathVariable String Expiry) throws Exception{
 		
 		long timerStart = System.currentTimeMillis();
-		
 		String strResult = "";
-		
-		strResult = strResult.concat("<link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css\" integrity=\"sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z\" crossorigin=\"anonymous\"> <script src=\"https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js\" integrity=\"sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd\" crossorigin=\"anonymous\"></script>");
 		
 		String urlOption = "https://www.deribit.com/api/v2/public/get_book_summary_by_currency?currency=" + Ccy + "&kind=option";
 		String result = HttpClient.doGet(urlOption);
@@ -62,9 +65,6 @@ public class Main {
 		BookSummaryQuote thisQuote = gson.fromJson(result, BookSummaryQuote.class);
 		
 		long timerDataEnd = System.currentTimeMillis();
-	    
-		strResult = strResult.concat(TimeString(thisQuote.usOut/1000));
-		strResult = strResult.concat("<p>");
 		
 		Map<String, Integer> ContractToID = new HashMap<String, Integer>();
 		for(int i=0; i<thisQuote.result.length; i++) {
@@ -75,9 +75,27 @@ public class Main {
 
 		ArrayList<String> sortedExpiry = SortExpiry(ContractToID);
 		
+		
+		strResult += "<link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css\" integrity=\"sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z\" crossorigin=\"anonymous\"> <script src=\"https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js\" integrity=\"sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd\" crossorigin=\"anonymous\"></script>";
+		
+		strResult +="<table style='text-align: left;' class=\"table table-striped table-hover table-light\">";
+		strResult += "<tr><th>Expiry</th></tr>"+
+				"<tr><td><a href = \"/listTickers/BTC/ALL\">ALL</a><td></tr>";
 		for(int j=0; j<sortedExpiry.size(); j++) {
 			
 			String thisExpiry = sortedExpiry.get(j);
+			
+			strResult += "<tr><td><a href = \"/listTickers/BTC/"  + thisExpiry + "\">" + thisExpiry + "</a><td></tr>";
+		}
+		strResult +="</table>";
+		
+		for(int j=0; j<sortedExpiry.size(); j++) {
+			
+			String thisExpiry = sortedExpiry.get(j);
+			
+			if (!(thisExpiry.equalsIgnoreCase(Expiry)) && !(Expiry.equalsIgnoreCase("ALL"))) {				
+				continue;
+			}
 			
 			strResult = strResult.concat("<p><table style='text-align: center;' class=\"table table-striped table-hover table-dark\"><tr><th style=\"width:20%\">Bid</th><th style=\"width:20%\">Ask</th><th style=\"width:20%\">"+ thisExpiry + "</th><th style=\"width:20%\">Bid</th><th style=\"width:20%\">Ask</th></tr><tr>");
 			
@@ -132,7 +150,9 @@ public class Main {
 		
 		
 		long timerEnd = System.currentTimeMillis();
-		String timerDiff =  Long.toString((timerDataEnd - timerStart)).toString().concat("ms ").concat(Long.toString((timerEnd - timerDataEnd)).toString().concat("ms <br/>"));
+		String timerDiff =  "<div>Retrieval Time: " + Long.toString((timerDataEnd - timerStart)).toString().concat("ms") + "</div>"
+				+ "<div>Process Time: "+ Long.toString((timerEnd - timerDataEnd)).toString() +"ms</div>"+
+				"<div>Data Time: "+TimeString(thisQuote.usOut/1000) + "</div>";
 		strResult = timerDiff.concat(strResult);
 		
 		return strResult;
