@@ -96,12 +96,12 @@ public class Main {
 		
 		strResult +="<table style='text-align: left;' class=\"table table-striped table-hover table-light\">";
 		strResult += "<tr><th>Expiry</th></tr>"+
-				"<tr><td><a href = \"/listTickers/"+ Ccy +"/ALL\">ALL</a><td></tr>";
+				"<tr><td><a href = \"/listTickers/"+ Ccy +"/ALL\">ALL</a></td></tr>";
 		for(int j=0; j<sortedExpiry.size(); j++) {
 			
 			String thisExpiry = sortedExpiry.get(j);
 			
-			strResult += "<tr><td><a href = \"/listTickers/"+ Ccy +"/"  + thisExpiry + "\">" + thisExpiry + "</a><td></tr>";
+			strResult += "<tr><td><a href = \"/listTickers/"+ Ccy +"/"  + thisExpiry + "\">" + thisExpiry + "</a></td></tr>";
 		}
 		strResult +="</table>";
 		
@@ -169,11 +169,13 @@ public class Main {
 		
 		
 		long timerEnd = System.currentTimeMillis();
-		String strHeader =  "<div><a href=\"/\">Home</a></div>"  
-				+ "<div>Data <i>Heroku Dublin <-> Deribit Strasbourg</i>: " + Long.toString((timerDataEnd - timerStart)).toString().concat("ms") + "</div>"
-				+ "<div>Calc <i>Java Backend Process @ Heroku Dublin</i>: "+ Long.toString((timerEnd - timerDataEnd)).toString() + "ms</div>"
-				+ "<div id=\"BrowserTime\">User <i>Request -> Response</i>: </div>"
-				+ "<div>Deribit Market Data Timestamp: "+TimeString(thisQuote.usOut/1000) + "</div>";
+		String strHeader =  
+				"<table style='text-align: left;' class=\"table table-hover\"><tr><td><a href=\"/\">Home</a></td></tr>"  
+				+ "<tr><td>Data <i>Heroku Dublin <-> Deribit Strasbourg</i>: " + Long.toString((timerDataEnd - timerStart)).toString()  + "ms</td></tr>"
+				+ "<tr><td>Calc <i>Java Backend Process @ Heroku Dublin</i>: "+ Long.toString((timerEnd - timerDataEnd)).toString() + "ms</td></tr>"
+				+ "<tr><td id=\"BrowserTime\">User <i>Request -> Response</i>: Waiting... </td></tr>"
+				+ "<tr><td>Deribit Market Data Timestamp: "+TimeString(thisQuote.usOut/1000) + "</td></tr>"
+				+ "</table>";
 		
 		strResult = strHeader +  strResult;
 		
