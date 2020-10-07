@@ -23,11 +23,11 @@ public class BlackScholesFormulae {
 		
 		double PxTolerance = 0.00001d * Spot;
 		double Increment = 0.00001d;
-		double InitialGuess = 0.5d;
+		double InitialGuess = 0.9d;
 		double thisIV = InitialGuess;
 		double thisCallPrice = BlackScholesCallPrice(Spot, Strike, YearFraction, thisIV);
 		
-		int MaxIter = 20;
+		int MaxIter = 100;
 		int CountIter = 0;
 		
 		while(Math.abs(CallPrice - thisCallPrice) >= PxTolerance) {
@@ -67,11 +67,11 @@ public class BlackScholesFormulae {
 		
 		double PxTolerance = 0.00001d * Spot;
 		double Increment = 0.00001d;
-		double InitialGuess = 0.5d;
+		double InitialGuess = 0.99d;
 		double thisIV = InitialGuess;
 		double thisPutPrice = BlackScholesPutPrice(Spot, Strike, YearFraction, thisIV);
 		
-		int MaxIter = 20;
+		int MaxIter = 100;
 		int CountIter = 0;
 		
 		while(Math.abs(PutPrice - thisPutPrice) >= PxTolerance) {
