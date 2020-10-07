@@ -67,8 +67,8 @@ public class BlackScholesFormulae {
 		while(Math.abs(PutPrice - thisPutPrice) >= PxTolerance) {
 			double thisIVP = thisIV + Increment; // 0.001% Increment of IV
 			double thisPutPriceP = BlackScholesPutPrice(Spot, Strike, YearFraction, thisIVP);
-			double dCallPx = (thisPutPriceP - thisPutPrice) / Increment;
-			thisIV = thisIV - (thisPutPrice - PutPrice) / dCallPx;
+			double dPutPx = (thisPutPriceP - thisPutPrice) / Increment;
+			thisIV = thisIV - (thisPutPrice - PutPrice) / dPutPx;
 			thisPutPrice = BlackScholesPutPrice(Spot, Strike, YearFraction, thisIV);
 		}
 		
