@@ -170,14 +170,14 @@ public class Main {
 		
 		long timerEnd = System.currentTimeMillis();
 		String strHeader =  "<div><a href=\"/\">Home</a></div>"  
-				+  "<div>Retrieval Time: " + Long.toString((timerDataEnd - timerStart)).toString().concat("ms") + "</div>"
-				+ "<div>Process Time: "+ Long.toString((timerEnd - timerDataEnd)).toString() + "ms</div>"
-				+ "<div id=\"BrowserTime\">Browser Time:</div>"
+				+  "<div>Data Retrieval: " + Long.toString((timerDataEnd - timerStart)).toString().concat("ms") + "</div>"
+				+ "<div>Server Process: "+ Long.toString((timerEnd - timerDataEnd)).toString() + "ms</div>"
+				+ "<div id=\"BrowserTime\">Browser Roundtrip: </div>"
 				+ "<div>Data Time: "+TimeString(thisQuote.usOut/1000) + "</div>";
 		
 		strResult = strHeader +  strResult;
 		
-		strResult += "<script>window.onload=updateBrowserTime;function updateBrowserTime(){document.getElementById(\"BrowserTime\").innerHTML=\"Browser Time: \"+(performance.timing.responseEnd - performance.timing.requestStart)+\"ms\"}</script>";
+		strResult += "<script>window.onload=updateBrowserTime;function updateBrowserTime(){document.getElementById(\"BrowserTime\").innerHTML=\"Browser Roundtrip: \"+(performance.timing.responseEnd - performance.timing.requestStart)+\"ms\"}</script>";
 		
 		strResult = "<link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css\" integrity=\"sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z\" crossorigin=\"anonymous\"> <script src=\"https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js\" integrity=\"sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd\" crossorigin=\"anonymous\"></script>"
 					+ strResult;
