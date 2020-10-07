@@ -26,7 +26,13 @@ public class BlackScholesFormulae {
 		double InitialGuess = 0.5d;
 		double thisIV = InitialGuess;
 		double thisCallPrice = BlackScholesCallPrice(Spot, Strike, YearFraction, thisIV);
+		
+		int MaxIter = 20;
+		int CountIter = 0;
+		
 		while(Math.abs(CallPrice - thisCallPrice) >= PxTolerance) {
+			CountIter += 1;
+			if(CountIter>MaxIter) {return 0;}
 			double thisIVP = thisIV + Increment; // 0.001% Increment of IV
 			double thisCallPriceP = BlackScholesCallPrice(Spot, Strike, YearFraction, thisIVP);
 			double dCallPx = (thisCallPriceP - thisCallPrice) / Increment;
@@ -64,7 +70,13 @@ public class BlackScholesFormulae {
 		double InitialGuess = 0.5d;
 		double thisIV = InitialGuess;
 		double thisPutPrice = BlackScholesPutPrice(Spot, Strike, YearFraction, thisIV);
+		
+		int MaxIter = 20;
+		int CountIter = 0;
+		
 		while(Math.abs(PutPrice - thisPutPrice) >= PxTolerance) {
+			CountIter += 1;
+			if(CountIter>MaxIter) {return 0;}
 			double thisIVP = thisIV + Increment; // 0.001% Increment of IV
 			double thisPutPriceP = BlackScholesPutPrice(Spot, Strike, YearFraction, thisIVP);
 			double dPutPx = (thisPutPriceP - thisPutPrice) / Increment;
