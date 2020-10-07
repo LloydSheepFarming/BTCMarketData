@@ -53,7 +53,7 @@ public class Main {
 	@ResponseBody
 	String root() {
 		return "<link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css\" integrity=\"sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z\" crossorigin=\"anonymous\"> <script src=\"https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js\" integrity=\"sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd\" crossorigin=\"anonymous\"></script>" + 
-				"<a href=\"/listTickers/BTC/\">List BTC</a><br/><a href=\"/listTickers/ETH/\">List ETH</a>";
+				"<table style='text-align: left;' class=\"table table-hover\"><tr><td><a href=\"/listTickers/BTC/\">List BTC</a></td></tr><tr><td><a href=\"/listTickers/ETH/\">List ETH</a></td></tr></table>";
 	}
 	
 	@RequestMapping("/listTickers/")
@@ -170,14 +170,14 @@ public class Main {
 		
 		long timerEnd = System.currentTimeMillis();
 		String strHeader =  "<div><a href=\"/\">Home</a></div>"  
-				+  "<div>Data Retrieval: " + Long.toString((timerDataEnd - timerStart)).toString().concat("ms") + "</div>"
-				+ "<div>Server Process: "+ Long.toString((timerEnd - timerDataEnd)).toString() + "ms</div>"
-				+ "<div id=\"BrowserTime\">Browser Roundtrip: </div>"
-				+ "<div>Data Time: "+TimeString(thisQuote.usOut/1000) + "</div>";
+				+ "<div>Data <i>Heroku Dublin <-> Deribit Strasbourg</i>: " + Long.toString((timerDataEnd - timerStart)).toString().concat("ms") + "</div>"
+				+ "<div>Calc <i>Java Backend Process @ Heroku Dublin</i>: "+ Long.toString((timerEnd - timerDataEnd)).toString() + "ms</div>"
+				+ "<div id=\"BrowserTime\">User <i>Request -> Response</i>: </div>"
+				+ "<div>Deribit Market Data Timestamp: "+TimeString(thisQuote.usOut/1000) + "</div>";
 		
 		strResult = strHeader +  strResult;
 		
-		strResult += "<script>window.onload=updateBrowserTime;function updateBrowserTime(){document.getElementById(\"BrowserTime\").innerHTML=\"Browser Roundtrip: \"+(performance.timing.responseEnd - performance.timing.requestStart)+\"ms\"}</script>";
+		strResult += "<script>window.onload=updateBrowserTime;function updateBrowserTime(){document.getElementById(\"BrowserTime\").innerHTML=\"User <i>Request -> Response</i>: \"+(performance.timing.responseEnd - performance.timing.requestStart)+\"ms\"}</script>";
 		
 		strResult = "<link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css\" integrity=\"sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z\" crossorigin=\"anonymous\"> <script src=\"https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js\" integrity=\"sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd\" crossorigin=\"anonymous\"></script>"
 					+ strResult;

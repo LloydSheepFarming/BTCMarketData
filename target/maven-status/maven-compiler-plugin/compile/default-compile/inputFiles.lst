@@ -1,4 +1,9 @@
 C:\Users\zoulu\eclipse-workspace\MarketData\src\main\java\com\lloyd\DeriMarketData\DataStructure\BookSummaryQuote.java
 C:\Users\zoulu\eclipse-workspace\MarketData\src\main\java\com\lloyd\DeriMarketData\Main.java
+C:\Users\zoulu\eclipse-workspace\MarketData\src\main\java\com\lloyd\DeriMarketData\Utilities\DateUtilities.java
+C:\Users\zoulu\eclipse-workspace\MarketData\src\main\java\com\lloyd\DeriMarketData\Instruments\EuropeanOption.java
 C:\Users\zoulu\eclipse-workspace\MarketData\src\main\java\com\lloyd\DeriMarketData\DataStructure\OptionQuote.java
 C:\Users\zoulu\eclipse-workspace\MarketData\src\main\java\com\lloyd\DeriMarketData\HttpClient.java
+C:\Users\zoulu\eclipse-workspace\MarketData\src\main\java\com\lloyd\DeriMarketData\Models\BlackScholes.java
+C:\Users\zoulu\eclipse-workspace\MarketData\src\main\java\com\lloyd\DeriMarketData\Maths\BlackScholesFormulae.java
+C:\Users\zoulu\eclipse-workspace\MarketData\src\main\java\com\lloyd\DeriMarketData\Maths\Distribution.java
