@@ -29,11 +29,11 @@ public class BookSummaryQuote {
 			double thisYF = DateUtilities.DateStringDeribitToYF(thisExpiry);
 			
 			if(PutOrCall.equals("C")) {
-				thisQuote.bid_vol = BlackScholesFormulae.BlackScholesCallIV(thisQuote.estimated_delivery_price, thisStrike, thisYF, thisQuote.bid_price * thisQuote.estimated_delivery_price);
-				thisQuote.ask_vol = BlackScholesFormulae.BlackScholesCallIV(thisQuote.estimated_delivery_price, thisStrike, thisYF, thisQuote.ask_price * thisQuote.estimated_delivery_price);
+				thisQuote.bid_vol = BlackScholesFormulae.BlackScholesCallIV(thisQuote.underlying_price, thisStrike, thisYF, thisQuote.bid_price * thisQuote.estimated_delivery_price);
+				thisQuote.ask_vol = BlackScholesFormulae.BlackScholesCallIV(thisQuote.underlying_price, thisStrike, thisYF, thisQuote.ask_price * thisQuote.estimated_delivery_price);
 			}else if(PutOrCall.equals("P")) {
-				thisQuote.bid_vol = BlackScholesFormulae.BlackScholesPutIV(thisQuote.estimated_delivery_price, thisStrike, thisYF, thisQuote.bid_price * thisQuote.estimated_delivery_price);
-				thisQuote.ask_vol = BlackScholesFormulae.BlackScholesPutIV(thisQuote.estimated_delivery_price, thisStrike, thisYF, thisQuote.ask_price * thisQuote.estimated_delivery_price);
+				thisQuote.bid_vol = BlackScholesFormulae.BlackScholesPutIV(thisQuote.underlying_price, thisStrike, thisYF, thisQuote.bid_price * thisQuote.estimated_delivery_price);
+				thisQuote.ask_vol = BlackScholesFormulae.BlackScholesPutIV(thisQuote.underlying_price, thisStrike, thisYF, thisQuote.ask_price * thisQuote.estimated_delivery_price);
 			}
 		}
 	}
